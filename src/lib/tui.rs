@@ -10,6 +10,7 @@ use crossterm::{
 };
 use ratatui::{backend::CrosstermBackend, Terminal};
 
+#[doc(hidden)]
 pub type CrosstermTerminal = ratatui::Terminal<ratatui::backend::CrosstermBackend<std::io::Stderr>>;
 
 use crate::{
@@ -58,8 +59,8 @@ impl Tui {
 
     /// [`Draw`] the terminal interface by [`rendering`] the widgets.
     ///
-    /// [`Draw`]: tui::Terminal::draw
-    /// [`rendering`]: crate::ui:render
+    /// [`Draw`]: crate::tui::Terminal::draw
+    /// [`rendering`]: crate::ui::render
     pub fn draw(&mut self, app: &mut App) -> Result<()> {
         self.terminal.draw(|frame| ui::render(app, frame))?;
         Ok(())
@@ -85,11 +86,12 @@ impl Tui {
     }
 }
 
+/// Initialize [TUI](`Tui`) and execute main loop
 pub fn start_terminal(app: &mut App) -> Result<()> {
     // Initialize the terminal user interface.
     let backend = CrosstermBackend::new(std::io::stderr());
     let terminal = Terminal::new(backend)?;
-    let events = EventHandler::new(200);
+    let events = EventHandler::new(50);
     let mut tui = Tui::new(terminal, events);
     tui.enter()?;
 
@@ -101,8 +103,8 @@ pub fn start_terminal(app: &mut App) -> Result<()> {
         let height = size().unwrap().1;
         match tui.events.next()? {
             Event::Tick => {}
-            Event::Key(key_event) => update::update_on_key(app, key_event),
-            Event::Mouse(mouse_event) => update::update_on_mouse(app, mouse_event, height / 2),
+            Event::Key(key_event) => update::update_on_key(app, key_event, height),
+            Event::Mouse(mouse_event) => update::update_on_mouse(app, mouse_event, height),
             Event::Resize(_, _) => {}
         };
     }

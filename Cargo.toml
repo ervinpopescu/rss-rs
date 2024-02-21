@@ -1,20 +1,32 @@
 [package]
-name = "rss-reader"
+name = "storyship"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "RSS reader for the terminal (WIP)"
+license = "MIT OR Apache-2.0"
+documentation = "https://docs.rs/storyship/0.1.2/storyship"
+repository = "https://github.com/ervinpopescu/storyship/"
 
 [dependencies]
 anyhow = "1.0.79"
+chrono = "0.4.34"
 clap = { version = "4.5.0", features = ["derive"] }
-cli-clipboard = "0.4.0"
 crossterm = { version = "0.27.0", features = ["event-stream"] }
 html-escape = "0.2.13"
 ratatui = "0.26.1"
 regex = { version = "1.10.3" }
 reqwest = "0.11.24"
 rss = "2.0.7"
-serde_json = "*"
+serde_json = "1.0.114"
 tokio = { version = "1.36.0", features = ["full"] }
 url-escape = "0.1.1"
+log = { version = "0.4.21" }
+env_logger = "0.11.2"
+
+[lib]
+name = "storyship_lib"
+path = "src/lib/mod.rs"
+
+[[bin]]
+name = "storyship"
+path = "src/bin/main.rs"
